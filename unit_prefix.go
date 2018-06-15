@@ -26,95 +26,66 @@ const (
     PREFIX_YOCTO
 )
 
-func UnitPrefixFromString(s string) UnitPrefix {
-    switch (s) {
-    case "Г", "G":
-        return PREFIX_GIGA
-    case "З", "Z":
-        return PREFIX_ZETTA
-    case "И", "Y":
-        return PREFIX_YOTTA
-    case "М", "M":
-        return PREFIX_MEGA
-    case "П", "P":
-        return PREFIX_PETA
-    case "Т", "T":
-        return PREFIX_TERA
-    case "Э", "E":
-        return PREFIX_EXA
-    case "а", "a":
-        return PREFIX_ATTO
-    case "г", "h":
-        return PREFIX_HECTO
-    case "д", "d":
-        return PREFIX_DECI
-    case "да", "da":
-        return PREFIX_DEKA
-    case "з", "z":
-        return PREFIX_ZEPTO
-    case "и", "y":
-        return PREFIX_YOCTO
-    case "к", "k":
-        return PREFIX_KILO
-    case "м", "m":
-        return PREFIX_MILLI
-    case "мк", "μ":
-        return PREFIX_MICRO
-    case "н", "n":
-        return PREFIX_NANO
-    case "п", "p":
-        return PREFIX_PICO
-    case "с", "c":
-        return PREFIX_CENTI
-    case "ф", "f":
-        return PREFIX_FEMTO
-    default:
-        return PREFIX_NONE
+var (
+    unitPrefixVariants = map[UnitPrefix][]string {
+        PREFIX_ATTO: []string{"a", "а"},
+        PREFIX_CENTI: []string{"c", "с"},
+        PREFIX_DECI: []string{"d", "д"},
+        PREFIX_DEKA: []string{"da", "да"},
+        PREFIX_EXA: []string{"E", "Э"},
+        PREFIX_FEMTO: []string{"f", "ф"},
+        PREFIX_GIGA: []string{"G", "Г"},
+        PREFIX_HECTO: []string{"h", "г"},
+        PREFIX_KILO: []string{"k", "к", "K"},
+        PREFIX_MEGA: []string{"M", "М"},
+        PREFIX_MICRO: []string{"μ", "мк",},
+        PREFIX_MILLI: []string{"m", "м"},
+        PREFIX_NANO: []string{"n", "н"},
+        PREFIX_PETA: []string{"P", "П"},
+        PREFIX_PICO: []string{"p", "п"},
+        PREFIX_TERA: []string{"T", "Т"},
+        PREFIX_YOCTO: []string{"y", "и"},
+        PREFIX_YOTTA: []string{"Y", "И"},
+        PREFIX_ZEPTO: []string{"z", "з"},
+        PREFIX_ZETTA: []string{"Z", "З"},
     }
+)
+
+func UnitPrefixValues() []UnitPrefix {
+    keys := make([]UnitPrefix, 0, len(unitPrefixVariants))
+    for k := range unitPrefixVariants {
+        keys = append(keys, k)
+    }
+    return keys
+}
+
+func UnitPrefixAllStringVariants() []string {
+    allVariants := make([]string, 0, len(unitPrefixVariants) * 2 + 1)[:0]
+    for _, variants := range unitPrefixVariants {
+        allVariants = append(allVariants, variants...)
+    }
+    return allVariants
+}
+
+func UnitPrefixFromString(s string) UnitPrefix {
+    for prefix, variants := range unitPrefixVariants {
+        for _, variant := range variants {
+            if variant == s {
+                return prefix
+            }
+        }
+    }
+    return PREFIX_NONE
 }
 
 func (up UnitPrefix) String() string {
-    switch (up) {
-    case PREFIX_YOTTA:
-        return "Y"
-    case PREFIX_ZETTA:
-        return "Z"
-    case PREFIX_EXA:
-        return "E"
-    case PREFIX_PETA:
-        return "P"
-    case PREFIX_TERA:
-        return "T"
-    case PREFIX_GIGA:
-        return "G"
-    case PREFIX_MEGA:
-        return "M"
-    case PREFIX_KILO:
-        return "k"
-    case PREFIX_HECTO:
-        return "h"
-    case PREFIX_DEKA:
-        return "da"
-    case PREFIX_DECI:
-        return "d"
-    case PREFIX_CENTI:
-        return "c"
-    case PREFIX_MILLI:
-        return "m"
-    case PREFIX_MICRO:
-        return "μ"
-    case PREFIX_NANO:
-        return "n"
-    case PREFIX_PICO:
-        return "p"
-    case PREFIX_FEMTO:
-        return "f"
-    case PREFIX_ATTO:
-        return "a"
-    case PREFIX_ZEPTO:
-        return "z"
-    case PREFIX_YOCTO:
-        return "y"
+    return up.StringVariants()[0]
+}
+
+func (up UnitPrefix) StringVariants() []string {
+    if variants, ok := unitPrefixVariants[up]; ok {
+        return variants
+    } else {
+        return []string{""}
     }
-    return ""
 }
