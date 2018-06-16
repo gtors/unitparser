@@ -1,3 +1,5 @@
+[![build status](https://travis-ci.com/gtors/unitparser.svg?branch=master)](https://travis-ci.com/gtors/unitparser)
+
 # Unitparser
 Parser of Physical Quantities and SI Units (Russian and English variants) implemented in Golang 
 
