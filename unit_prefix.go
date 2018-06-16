@@ -89,3 +89,50 @@ func (up UnitPrefix) StringVariants() []string {
         return []string{""}
     }
 }
+
+func (up UnitPrefix) GetMultiplier() float64 {
+    switch {
+    case PREFIX_ATTO:
+        return 1E-18
+    case PREFIX_CENTI:
+        return 1E-2
+    case PREFIX_DECI:
+        return 1E-1
+    case PREFIX_DEKA:
+        return 10.0
+    case PREFIX_EXA:
+        return 1E+18
+    case PREFIX_FEMTO:
+        return 1E-15
+    case PREFIX_GIGA:
+        return 1E+9
+    case PREFIX_HECTO:
+        return 1E+2
+    case PREFIX_KILO:
+        return 1E+3
+    case PREFIX_MEGA:
+        return 1E+6
+    case PREFIX_MICRO:
+        return 1E-6
+    case PREFIX_MILLI:
+        return 1E-3
+    case PREFIX_NANO:
+        return 1E-9
+    case PREFIX_PETA:
+        return 1E+15
+    case PREFIX_PICO:
+        return 1E-12
+    case PREFIX_TERA:
+        return 1E+12
+    case PREFIX_YOCTO:
+        return 1E-24
+    case PREFIX_YOTTA:
+        return 1E+24
+    case PREFIX_ZEPTO:
+        return 1E-21
+    case PREFIX_ZETTA:
+        return 1E+21
+    default:
+        return 1
+    }
+}
